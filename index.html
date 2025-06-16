@@ -265,6 +265,23 @@
             }
         }
     </style>
+    </script>
+<div id="popup-message" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(40,40,80,0.45); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background: white; color: #667eea; border-radius: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); padding: 40px 30px; font-size: 1.3em; font-weight: bold; text-align:center; max-width:90vw; margin:auto;">
+    <span id="popup-text"></span>
+    <br><br>
+    <button onclick="closePopup()" style="background:#667eea; color:white; border:none; border-radius:20px; padding:10px 30px; font-size:1em; margin-top:10px; cursor:pointer;">OK</button>
+  </div>
+</div>
+<script>
+function showPopup(message) {
+    document.getElementById('popup-text').textContent = message;
+    document.getElementById('popup-message').style.display = 'flex';
+}
+function closePopup() {
+    document.getElementById('popup-message').style.display = 'none';
+}
+</script>   
 </head>
 <body>
     <div class="container">
@@ -4244,19 +4261,70 @@ function shuffleArray(array) {
     }
 }
 
-        // Générer une question aléatoire pour une matière
-        function generateQuestion(subject) {
-            const subjectQuestions = questions[subject];
-            const randomIndex = Math.floor(Math.random() * subjectQuestions.length);
-            currentQuestion = {
-                subject: subject,
-                data: subjectQuestions[randomIndex],
-                index: randomIndex
-            };
-            questionAnswered = false;
-            
-            displayQuestion(subject);
-        }
+// ...existing code...
+
+// Mélange un tableau (algorithme de Fisher-Yates)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// ...existing code...
+
+// Ajoute un objet pour suivre les questions déjà posées pour chaque matière
+const askedQuestions = {
+    francais: [],
+    maths: [],
+    histoire: [],
+    physique: [],
+    svt: []
+};
+
+// Générer une question aléatoire pour une matière avec réponses mélangées, sans doublon
+function generateQuestion(subject) {
+    const subjectQuestions = questions[subject];
+    // Filtrer les questions non posées
+    const availableIndexes = subjectQuestions
+        .map((q, idx) => idx)
+        .filter(idx => !askedQuestions[subject].includes(idx));
+
+    // Si toutes les questions ont été posées, on réinitialise
+    if (availableIndexes.length === 0) {
+        askedQuestions[subject] = [];
+        // On prévient l'utilisateur ou on recommence
+        showPopup("Tu as répondu à toutes les questions de ce QCM ! Le QCM recommence.");
+        // On relance avec toutes les questions
+        availableIndexes.push(...subjectQuestions.map((q, idx) => idx));
+    }
+
+    // Choisir un index au hasard parmi les questions non posées
+    const randomIndex = availableIndexes[Math.floor(Math.random() * availableIndexes.length)];
+    askedQuestions[subject].push(randomIndex);
+
+    const originalQuestion = subjectQuestions[randomIndex];
+
+    // Mélanger les réponses et ajuster l'index de la bonne réponse
+    const answers = originalQuestion.answers.map((ans, idx) => ({ ans, idx }));
+    shuffleArray(answers);
+    const shuffledAnswers = answers.map(a => a.ans);
+    const newCorrect = answers.findIndex(a => a.idx === originalQuestion.correct);
+
+    currentQuestion = {
+        subject: subject,
+        data: {
+            question: originalQuestion.question,
+            answers: shuffledAnswers,
+            correct: newCorrect
+        },
+        index: randomIndex
+    };
+    questionAnswered = false;
+
+    displayQuestion(subject);
+}
+
 
         // Afficher la question
         function displayQuestion(subject) {
