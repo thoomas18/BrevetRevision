@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Révision Brevet 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn.active {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        .page {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            min-height: 600px;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .subject-nav {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .subject-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .subject-btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+
+        .subject-btn.active {
+            background: #4c63d2;
+        }
+
+        .home-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .subject-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .subject-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .course-content {
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .course-content h2 {
+            color: #667eea;
+            margin: 25px 0 15px 0;
+            font-size: 1.4em;
+        }
+
+        .course-content h3 {
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-size: 1.2em;
+        }
+
+        .qcm-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .question {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .answer-option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-option:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .answer-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .answer-option.correct {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .answer-option.incorrect {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .qcm-controls {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            .nav-bar {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .subject-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .home-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Révision Brevet 2025</h1>
+            <p>Ton site complet pour réussir le Diplôme National du Brevet</p>
+        </div>
+
+        <div class="nav-bar">
+            <button class="nav-btn active" onclick="showPage('home')">🏠 Accueil</button>
+            <button class="nav-btn" onclick="showPage('francais')">📚 Français</button>
+            <button class="nav-btn" onclick="showPage('maths')">🔢 Mathématiques</button>
+            <button class="nav-btn" onclick="showPage('histoire')">🏛️ Histoire-Géo</button>
+            <button class="nav-btn" onclick="showPage('physique')">⚗️ Physique-Chimie</button>
+            <button class="nav-btn" onclick="showPage('svt')">🧬 SVT</button>
+        </div>
+
+        <!-- PAGE ACCUEIL -->
+        <div id="home" class="page active">
+            <h2>Bienvenue sur ton site de révision !</h2>
+            <p>Prépare-toi efficacement pour le Brevet 2025 avec des cours complets et des QCM interactifs dans toutes les matières.</p>
+            
+            <div class="home-grid">
+                <div class="subject-card" onclick="showPage('francais')">
+                    <h3>📚 Français</h3>
+                    <p>Grammaire, orthographe, littérature et expression écrite</p>
+                </div>
+                <div class="subject-card" onclick="showPage('maths')">
+                    <h3>🔢 Mathématiques</h3>
+                    <p>Algèbre, géométrie, probabilités et fonctions</p>
+                </div>
+                <div class="subject-card" onclick="showPage('histoire')">
+                    <h3>🏛️ Histoire-Géographie</h3>
+                    <p>De 1914 à nos jours, géographie de la France et du monde</p>
+                </div>
+                <div class="subject-card" onclick="showPage('physique')">
+                    <h3>⚗️ Physique-Chimie</h3>
+                    <p>Matière, énergie, mouvement et interactions</p>
+                </div>
+                <div class="subject-card" onclick="showPage('svt')">
+                    <h3>🧬 SVT</h3>
+                    <p>Corps humain, environnement et évolution</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE FRANÇAIS -->
+        <div id="francais" class="page">
+            <div class="subject-nav">
+                <button class="subject-btn active" onclick="showSubjectContent('francais', 'cours')">📖 Cours</button>
+                <button class="subject-btn" onclick="showSubjectContent('francais', 'qcm')">❓ QCM</button>
+            </div>
+
+            <div id="francais-cours" class="subject-content">
+                <div class="course-content">
+                    <h2>Programme de Français - Brevet 2025</h2>
+                    
+                    <h3>1. Grammaire et Orthographe</h3>
+                    <p><strong>Les classes grammaticales :</strong> Les mots se répartissent en classes grammaticales fixes : nom, déterminant, adjectif, pronom, verbe, adverbe, préposition, conjonction, interjection. Chaque classe a des propriétés spécifiques.</p>
+                    
+                    <p><strong>Les fonctions grammaticales :</strong> Dans une phrase, chaque mot ou groupe de mots occupe une fonction : sujet, COD, COI, complément circonstanciel, attribut du sujet, épithète, apposition.</p>
+                    
+                    <p><strong>La conjugaison :</strong> Maîtriser les temps de l'indicatif (présent, imparfait, passé simple, futur), du subjonctif (présent), du conditionnel (présent), de l'impératif. Attention aux accords du participe passé.</p>
+
+                    <h3>2. Littérature et Lecture</h3>
+                    <p><strong>Les genres littéraires :</strong> Roman (récit long avec personnages développés), nouvelle (récit court), théâtre (texte destiné à être joué), poésie (jeu sur le langage et les sonorités).</p>
+                    
+                    <p><strong>Les figures de style :</strong> Métaphore (comparaison implicite), comparaison (rapprochement avec "comme"), personnification (donner vie à l'inanimé), hyperbole (exagération), antithèse (opposition).</p>
+                    
+                    <p><strong>Le narrateur :</strong> Point de vue interne (je/il sait tout d'un personnage), externe (témoin extérieur), omniscient (sait tout de tous les personnages).</p>
+
+                    <h3>3. Expression Écrite</h3>
+                    <p><strong>La rédaction :</strong> Structure en introduction (présentation du sujet), développement (arguments organisés en paragraphes), conclusion (bilan et ouverture). Utiliser des connecteurs logiques.</p>
+                    
+                    <p><strong>L'argumentation :</strong> Présenter une thèse, développer des arguments avec des exemples, anticiper les objections, conclure clairement.</p>
+                    
+                    <p><strong>Le récit :</strong> Respecter la chronologie, varier les temps (imparfait pour le cadre, passé simple pour les actions), développer les descriptions et les dialogues.</p>
+                </div>
+            </div>
+
+            <div id="francais-qcm" class="subject-content" style="display: none;">
+                <div class="qcm-container">
+                    <div class="qcm-controls">
+                        <button class="btn" onclick="generateQuestion('francais')">Nouvelle Question</button>
+                        <div class="score" id="francais-score">Score: 0/0</div>
+                    </div>
+                    <div id="francais-question"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE MATHS -->
+        <div id="maths" class="page">
+            <div class="subject-nav">
+                <button class="subject-btn active" onclick="showSubjectContent('maths', 'cours')">📖 Cours</button>
+                <button class="subject-btn" onclick="showSubjectContent('maths', 'qcm')">❓ QCM</button>
+            </div>
+
+            <div id="maths-cours" class="subject-content">
+                <div class="course-content">
+                    <h2>Programme de Mathématiques - Brevet 2025</h2>
+                    
+                    <h3>1. Nombres et Calculs</h3>
+                    <p><strong>Les nombres relatifs :</strong> Addition : même signe → on additionne et on garde le signe ; signes différents → on soustrait et on garde le signe du plus grand. Multiplication : même signe → résultat positif ; signes différents → résultat négatif.</p>
+                    
+                    <p><strong>Les fractions :</strong> Addition/soustraction : mettre au même dénominateur. Multiplication : multiplier numérateurs entre eux et dénominateurs entre eux. Division : multiplier par l'inverse.</p>
+                    
+                    <p><strong>Les puissances :</strong> a^m × a^n = a^(m+n) ; (a^m)^n = a^(m×n) ; a^m ÷ a^n = a^(m-n). Puissances de 10 pour l'écriture scientifique.</p>
+
+                    <h3>2. Géométrie</h3>
+                    <p><strong>Théorème de Pythagore :</strong> Dans un triangle rectangle, le carré de l'hypoténuse égale la somme des carrés des deux autres côtés : a² + b² = c².</p>
+                    
+                    <p><strong>Théorème de Thalès :</strong> Si deux droites sont parallèles, alors elles déterminent des segments proportionnels : AB/AC = AD/AE = BD/CE.</p>
+                    
+                    <p><strong>Trigonométrie :</strong> Dans un triangle rectangle, cos(angle) = côté adjacent/hypoténuse ; sin(angle) = côté opposé/hypoténuse ; tan(angle) = côté opposé/côté adjacent.</p>
+
+                    <h3>3. Fonctions</h3>
+                    <p><strong>Fonctions linéaires :</strong> f(x) = ax. Le graphique est une droite passant par l'origine. Le coefficient a est le coefficient directeur.</p>
+                    
+                    <p><strong>Fonctions affines :</strong> f(x) = ax + b. Le graphique est une droite. a est le coefficient directeur, b l'ordonnée à l'origine.</p>
+                    
+                    <p><strong>Proportionnalité :</strong> Tableau de proportionnalité : on peut passer d'une ligne à l'autre en multipliant par un même nombre (coefficient de proportionnalité).</p>
+
+                    <h3>4. Statistiques et Probabilités</h3>
+                    <p><strong>Statistiques :</strong> Moyenne = somme des valeurs / nombre de valeurs. Médiane = valeur centrale quand on classe par ordre croissant. Étendue = plus grande valeur - plus petite valeur.</p>
+                    
+                    <p><strong>Probabilités :</strong> Probabilité = nombre de cas favorables / nombre de cas possibles. La probabilité est comprise entre 0 et 1 (ou 0% et 100%).</p>
+                </div>
+            </div>
+
+            <div id="maths-qcm" class="subject-content" style="display: none;">
+                <div class="qcm-container">
+                    <div class="qcm-controls">
+                        <button class="btn" onclick="generateQuestion('maths')">Nouvelle Question</button>
+                        <div class="score" id="maths-score">Score: 0/0</div>
+                    </div>
+                    <div id="maths-question"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE HISTOIRE-GEO -->
+        <div id="histoire" class="page">
+            <div class="subject-nav">
+                <button class="subject-btn active" onclick="showSubjectContent('histoire', 'cours')">📖 Cours</button>
+                <button class="subject-btn" onclick="showSubjectContent('histoire', 'qcm')">❓ QCM</button>
+            </div>
+
+            <div id="histoire-cours" class="subject-content">
+                <div class="course-content">
+                    <h2>Programme d'Histoire-Géographie - Brevet 2025</h2>
+                    
+                    <h3>Histoire : L'Europe et le monde au XXe siècle</h3>
+                    <p><strong>La Première Guerre mondiale (1914-1918) :</strong> Guerre de tranchées sur le front occidental. Génocide arménien (1915). Révolution russe (1917). Armistice du 11 novembre 1918. Bilan : 10 millions de morts, redécoupage de l'Europe.</p>
+                    
+                    <p><strong>L'entre-deux-guerres :</strong> Crise économique de 1929 aux États-Unis, puis mondiale. Montée des fascismes : Mussolini en Italie (1922), Hitler en Allemagne (1933). Régimes totalitaires qui contrôlent la société.</p>
+                    
+                    <p><strong>La Seconde Guerre mondiale (1939-1945) :</strong> Guerre d'anéantissement. Shoah : génocide des Juifs d'Europe (6 millions de victimes). France occupée (1940-1944), Résistance et collaboration. Libération (débarquement 6 juin 1944).</p>
+                    
+                    <p><strong>La Guerre froide (1947-1991) :</strong> Affrontement indirect USA/URSS. Blocus de Berlin (1948), mur de Berlin (1961-1989). Course aux armements nucléaires. Décolonisation dans ce contexte.</p>
+
+                    <h3>Géographie : La France et l'Europe</h3>
+                    <p><strong>Les espaces productifs français :</strong> Espaces agricoles (Beauce, Champagne), industriels (Nord, Est), touristiques (littoraux, montagne, Paris). Tertiarisation de l'économie.</p>
+                    
+                    <p><strong>L'aménagement du territoire :</strong> Déséquilibres : concentration Paris/région parisienne vs déserts ruraux. Politiques d'aménagement : TGV, décentralisation, métropoles d'équilibre.</p>
+                    
+                    <p><strong>L'Union européenne :</strong> Construction progressive depuis 1957 (traité de Rome). 27 pays membres. Institutions : Commission, Parlement, Conseil. Euro, espace Schengen, politiques communes.</p>
+                </div>
+            </div>
+
+            <div id="histoire-qcm" class="subject-content" style="display: none;">
+                <div class="qcm-container">
+                    <div class="qcm-controls">
+                        <button class="btn" onclick="generateQuestion('histoire')">Nouvelle Question</button>
+                        <div class="score" id="histoire-score">Score: 0/0</div>
+                    </div>
+                    <div id="histoire-question"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE PHYSIQUE-CHIMIE -->
+        <div id="physique" class="page">
+            <div class="subject-nav">
+                <button class="subject-btn active" onclick="showSubjectContent('physique', 'cours')">📖 Cours</button>
+                <button class="subject-btn" onclick="showSubjectContent('physique', 'qcm')">❓ QCM</button>
+            </div>
+
+            <div id="physique-cours" class="subject-content">
+                <div class="course-content">
+                    <h2>Programme de Physique-Chimie - Brevet 2025</h2>
+                    
+                    <h3>1. Organisation et transformation de la matière</h3>
+                    <p><strong>Atomes et molécules :</strong> L'atome est constitué d'un noyau (protons + neutrons) et d'électrons. Les molécules sont des assemblages d'atomes. Formules chimiques : H₂O (eau), CO₂ (dioxyde de carbone).</p>
+                    
+                    <p><strong>Les transformations chimiques :</strong> Réactifs → Produits. Conservation des atomes : même nombre d'atomes de chaque élément avant et après. Équilibrer les équations chimiques.</p>
+                    
+                    <p><strong>Solutions et pH :</strong> Solution = solvant + soluté. pH mesure l'acidité : pH < 7 (acide), pH = 7 (neutre), pH > 7 (basique). Indicateurs colorés changent de couleur selon le pH.</p>
+
+                    <h3>2. Mouvements et interactions</h3>
+                    <p><strong>Vitesse :</strong> v = d/t (vitesse = distance/temps). Unités : m/s, km/h. Mouvement uniforme : vitesse constante. Mouvement accéléré : vitesse qui augmente.</p>
+                    
+                    <p><strong>Forces :</strong> Force = action sur un objet qui peut modifier son mouvement. Poids P = m × g (g = 9,8 N/kg sur Terre). Forces de contact (poussée, traction) et à distance (poids, force magnétique).</p>
+                    
+                    <p><strong>Gravitation :</strong> Tous les objets s'attirent. Plus ils sont massifs et proches, plus l'attraction est forte. La Lune tourne autour de la Terre, la Terre autour du Soleil.</p>
+
+                    <h3>3. L'énergie et ses conversions</h3>
+                    <p><strong>Formes d'énergie :</strong> Cinétique (mouvement), potentielle (position), thermique (chaleur), électrique, chimique, nucléaire, rayonnante (lumière).</p>
+                    
+                    <p><strong>Conservation de l'énergie :</strong> L'énergie ne se crée ni ne se détruit, elle se transforme. Exemple : énergie chimique (essence) → énergie cinétique (voiture) + énergie thermique (chaleur).</p>
+                    
+                    <p><strong>Sources d'énergie :</strong> Renouvelables (solaire, éolienne, hydraulique) et non renouvelables (pétrole, gaz, charbon, uranium). Enjeux énergétiques et environnementaux.</p>
+
+                    <h3>4. Des signaux pour observer et communiquer</h3>
+                    <p><strong>La lumière :</strong> Propagation rectiligne dans un milieu homogène. Vitesse : 300 000 km/s dans le vide. Décomposition de la lumière blanche : spectre des couleurs.</p>
+                    
+                    <p><strong>Sons :</strong> Vibrations qui se propagent dans la matière. Fréquence (Hz) détermine la hauteur, amplitude détermine l'intensité. Échographie, sonar utilisent les ultrasons.</p>
+                </div>
+            </div>
+
+            <div id="physique-qcm" class="subject-content" style="display: none;">
+                <div class="qcm-container">
+                    <div class="qcm-controls">
+                        <button class="btn" onclick="generateQuestion('physique')">Nouvelle Question</button>
+                        <div class="score" id="physique-score">Score: 0/0</div>
+                    </div>
+                    <div id="physique-question"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE SVT -->
+        <div id="svt" class="page">
+            <div class="subject-nav">
+                <button class="subject-btn active" onclick="showSubjectContent('svt', 'cours')">📖 Cours</button>
+                <button class="subject-btn" onclick="showSubjectContent('svt', 'qcm')">❓ QCM</button>
+            </div>
+
+            <div id="svt-cours" class="subject-content">
+                <div class="course-content">
+                    <h2>Programme de SVT - Brevet 2025</h2>
+                    
+                    <h3>1. Le corps humain et la santé</h3>
+                    <p><strong>La nutrition :</strong> Digestion transforme les aliments en nutriments absorbés par l'intestin grêle. Circulation sanguine transporte nutriments et dioxygène vers les cellules, et évacue les déchets.</p>
+                    
+                    <p><strong>La respiration :</strong> Échanges gazeux dans les alvéoles pulmonaires : O₂ passe dans le sang, CO₂ passe dans l'air expiré. Transport par les globules rouges (hémoglobine).</p>
+                    
+                    <p><strong>Le système immunitaire :</strong> Défense contre les microbes. Première ligne : peau, muqueuses. Deuxième ligne : globules blancs (lymphocytes). Vaccination : stimuler la production d'anticorps.</p>
+                    
+                    <p><strong>La reproduction :</strong> Puberté : maturation des organes reproducteurs. Cycle menstruel (28 jours). Fécondation : rencontre ovule-spermatozoïde. Développement embryonnaire et fœtal.</p>
+
+                    <h3>2. La planète Terre, l'environnement et l'action humaine</h3>
+                    <p><strong>Météorologie et climatologie :</strong> Effet de serre naturel nécessaire à la vie. Activités humaines augmentent les gaz à effet de serre → réchauffement climatique. Conséquences : fonte des glaces, montée des eaux.</p>
+                    
+                    <p><strong>Les écosystèmes :</strong> Réseau trophique : producteurs (plantes) → consommateurs primaires (herbivores) → consommateurs secondaires (carnivores). Décomposeurs recyclent la matière organique.</p>
+                    
+                    <p><strong>L'exploitation des ressources :</strong> Ressources renouvelables (forêts si gestion durable) et non renouvelables (minerais, énergies fossiles). Nécessité du développement durable.</p>
+
+                    <h3>3. Le vivant et son évolution</h3>
+                    <p><strong>Unité et diversité du vivant :</strong> Tous les êtres vivants sont constitués de cellules. ADN porte l'information génétique. Parenté entre espèces révélée par ressemblances anatomiques et génétiques.</p>
+                    
+                    <p><strong>La biodiversité :</strong> Diversité des espèces, des écosystèmes, génétique. Facteurs de son évolution : mutations, sélection naturelle, dérive génétique. Action humaine peut la réduire ou la protéger.</p>
+                    
+                    <p><strong>Reproduction sexuée :</strong> Brassage génétique lors de la formation des gamètes et de la fécondation. Chaque individu est génétiquement unique (sauf vrais jumeaux).</p>
+                </div>
+            </div>
+
+            <div id="svt-qcm" class="subject-content" style="display: none;">
+                <div class="qcm-container">
+                    <div class="qcm-controls">
+                        <button class="btn" onclick="generateQuestion('svt')">Nouvelle Question</button>
+                        <div class="score" id="svt-score">Score: 0/0</div>
+                    </div>
+                    <div id="svt-question"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // État des scores pour chaque matière
+        const scores = {
+            francais: { correct: 0, total: 0 },
+            maths: { correct: 0, total: 0 },
+            histoire: { correct: 0, total: 0 },
+            physique: { correct: 0, total: 0 },
+            svt: { correct: 0, total: 0 }
+        };
+
+        // Questions pour chaque matière
+        const questions = {
+            francais: [
+                {
+                    question: "Quelle est la fonction du mot souligné dans : 'Le chat <u>noir</u> dort' ?",
+                    answers: ["Sujet", "Épithète", "Attribut du sujet", "COD"],
+                    correct: 1
+                },
+                {
+                    question: "Quel temps exprime une action habituelle dans le passé ?",
+                    answers: ["Passé simple", "Imparfait", "Plus-que-parfait", "Passé composé"],
+                    correct: 1
+                },
+                {
+                    question: "Quelle figure de style : 'Ses yeux sont des étoiles' ?",
+                    answers: ["Comparaison", "Métaphore", "Personnification", "Hyperbole"],
+                    correct: 1
+                },
+                {
+                    question: "Dans quelle proposition le participe passé est-il bien accordé ?",
+                    answers: ["Elle s'est lavé les mains", "Elle s'est lavée les mains", "Les mains qu'elle s'est lavé", "Les mains qu'elle s'est lavée"],
+                    correct: 0
+                },
+                {
+                    question: "Quel type de narrateur sait tout de tous les personnages ?",
+                    answers: ["Narrateur interne", "Narrateur externe", "Narrateur omniscient", "Narrateur témoin"],
+                    correct: 2
+                },
+                { question: "Quel est le synonyme de 'content' ?", answers: ["Triste", "Heureux", "Fatigué", "Fâché"], correct: 1 },
+                { question: "Quel mot est un adjectif ?", answers: ["Courir", "Rouge", "Rapidement", "Chaleur"], correct: 1 },
+                { question: "Quelle est la nature du mot 'rapidement' ?", answers: ["Nom", "Verbe", "Adverbe", "Adjectif"], correct: 2 },
+                { question: "Quel est le pluriel de 'cheval' ?", answers: ["Chevals", "Chevaux", "Chevaus", "Chevalles"], correct: 1 },
+                { question: "Dans quel temps est conjugué le verbe : 'il alla' ?", answers: ["Imparfait", "Futur", "Passé simple", "Présent"], correct: 2 },
+                { question: "Quelle est la fonction du mot 'elle' dans : 'Elle lit un livre.' ?", answers: ["COD", "Sujet", "Complément", "Verbe"], correct: 1 },
+                { question: "Quelle figure de style : 'Il pleure dans mon cœur comme il pleut sur la ville' ?", answers: ["Comparaison", "Métaphore", "Anaphore", "Personnification"], correct: 0 },
+    
+            ],
+            maths: [
+                {
+                    question: "Combien vaut (-3) × (-7) ?",
+                    answers: ["-21", "21", "-10", "10"],
+                    correct: 1
+                },
+                {
+                    question: "Comment écrit-on 0,00045 en notation scientifique ?",
+                    answers: ["45 × 10⁻⁵", "4,5 × 10⁻⁴", "4,5 × 10⁻⁵", "0,45 × 10⁻³"],
+                    correct: 1
+                },
+                {
+                    question: "Dans un triangle rectangle, si les côtés de l'angle droit mesurent 3 et 4, que mesure l'hypoténuse ?",
+                    answers: ["5", "7", "√7", "12"],
+                    correct: 0
+                },
+                {
+                    question: "Si f(x) = 2x + 3, que vaut f(5) ?",
+                    answers: ["10", "13", "8", "7"],
+                    correct: 1
+                },
+                {
+                    question: "La médiane de la série 2, 5, 3, 8, 1 est :",
+                    answers: ["3", "3,8", "5", "2"],
+                    correct: 0
+                },
+                { question: "Quelle est la valeur de π (approximée) ?", answers: ["3.14", "2.71", "1.62", "3.00"], correct: 0 },
+                { question: "Quel est le carré de 12 ?", answers: ["124", "144", "132", "122"], correct: 1 },
+                { question: "Combien font 7 × 8 ?", answers: ["56", "54", "64", "58"], correct: 0 },
+                { question: "Quelle est la racine carrée de 81 ?", answers: ["8", "9", "10", "7"], correct: 1 },
+                { question: "Résultat de (3 + 5) × 2 ?", answers: ["11", "16", "13", "8"], correct: 1 },
+                { question: "Si f(x) = 3x + 1, alors f(2) = ?", answers: ["7", "8", "6", "5"], correct: 0 },
+                { question: "Un triangle avec côtés 3, 4, 5 est :", answers: ["équilatéral", "rectangle", "isocèle", "quelconque"], correct: 1 },
+            ],
+            histoire: [
+                {
+                    question: "En quelle année a commencé la Première Guerre mondiale ?",
+                    answers: ["1914", "1916", "1913", "1915"],
+                    correct: 0
+                },
+                {
+                    question: "Qui était le dirigeant de l'Allemagne nazie ?",
+                    answers: ["Mussolini", "Staline", "Hitler", "Franco"],
+                    correct: 2
+                },
+                {
+                    question: "Quand a eu lieu le débarquement de Normandie ?",
+                    answers: ["6 juin 1944", "8 mai 1945", "11 novembre 1918", "1er septembre 1939"],
+                    correct: 0
+                },
+                {
+                    question: "Le mur de Berlin a été construit en :",
+                    answers: ["1945", "1949", "1961", "1989"],
+                    correct: 2
+                },
+                {
+                    question: "Quel traité a créé la CEE en 1957 ?",
+                    answers: ["Traité de Versailles", "Traité de Rome", "Traité de Maastricht", "Traité de Paris"],
+                    correct: 1
+                },
+                 { question: "Quelle année marque la fin de la Seconde Guerre mondiale ?", answers: ["1944", "1945", "1946", "1947"], correct: 1 },
+                { question: "Quel pays a été divisé par le mur de Berlin ?", answers: ["France", "Allemagne", "Pologne", "URSS"], correct: 1 },
+                { question: "En quelle année a débuté la Première Guerre mondiale ?", answers: ["1914", "1918", "1939", "1945"], correct: 0 },
+                { question: "Quel traité met fin à la Première Guerre mondiale ?", answers: ["Traité de Versailles", "Traité de Rome", "Traité de Maastricht", "Traité de Paris"], correct: 0 },
+                { question: "Qui était président de la République en 1958 ?", answers: ["François Mitterrand", "Georges Pompidou", "Charles de Gaulle", "Jacques Chirac"], correct: 2 },
+                { question: "Quel pays a construit le mur de Berlin ?", answers: ["USA", "URSS", "France", "RFA"], correct: 1 },
+                { question: "Combien d'États membres dans l'UE en 2023 ?", answers: ["27", "25", "30", "26"], correct: 0 },
+            ],
+            physique: [
+                {
+                    question: "Quelle est la formule de l'eau ?",
+                    answers: ["H₂O", "CO₂", "HO₂", "H₂O₂"],
+                    correct: 0
+                },
+                {
+                    question: "La vitesse de la lumière dans le vide est d'environ :",
+                    answers: ["300 km/s", "3000 km/s", "300 000 km/s", "30 000 km/s"],
+                    correct: 2
+                },
+                {
+                    question: "Sur Terre, l'intensité de pesanteur g vaut environ :",
+                    answers: ["9,8 m/s²", "9,8 N/kg", "Les deux", "Ni l'un ni l'autre"],
+                    correct: 2
+                },
+                {
+                    question: "Un objet qui a un pH de 3 est :",
+                    answers: ["Neutre", "Basique", "Acide", "Impossible à déterminer"],
+                    correct: 2
+                },
+                {
+                    question: "L'énergie cinétique dépend de :",
+                    answers: ["La masse seulement", "La vitesse seulement", "La masse et la vitesse", "La position"],
+                    correct: 2
+                },
+                { question: "Quelle est la formule de la vitesse ?", answers: ["v = d/t", "v = m/a", "v = F/m", "v = E/t"], correct: 0 },
+                { question: "Quel est l'état de la matière à température ambiante ?", answers: ["Solide", "Liquide", "Gazeux", "Tous les trois"], correct: 3 },
+                { question: "Quelle est la principale source d'énergie renouvelable ?", answers: ["Pétrole", "Charbon", "Solaire", "Nucléaire"], correct: 2 },
+                { question: "Quel est le symbole chimique de l'or ?", answers: ["Au", "Ag", "Fe", "Hg"], correct: 0 },
+                { question: "Quel appareil mesure la pression atmosphérique ?", answers: ["Thermomètre", "Baromètre", "Anémomètre", "Hygromètre"], correct: 1 },
+                { question: "Quelle est l'unité de mesure de l'énergie ?", answers: ["Joule", "Watt", "Newton", "Pascal"], correct: 0 },
+                { question: "Quel est le principal gaz à effet de serre ?", answers: ["Oxygène", "Azote", "Dioxyde de carbone", "Méthane"], correct: 2 },
+                { question: "Quel est le symbole chimique du sodium ?", answers: ["Na", "K", "Ca", "Mg"], correct: 0 },
+                { question: "Quel est l’unité de la force ?", answers: ["Joule", "Watt", "Newton", "Pascal"], correct: 2 },
+                { question: "Quel instrument mesure la tension ?", answers: ["Ampèremètre", "Voltmètre", "Thermomètre", "Balance"], correct: 1 },
+                { question: "Quelle est la formule de la vitesse ?", answers: ["v = d / t", "v = m × a", "v = E / t", "v = f / m"], correct: 0 },
+                { question: "Quel est l'état de l'eau à 100°C ?", answers: ["Liquide", "Solide", "Gazeux", "Plasma"], correct: 2 },
+                { question: "Quel est le symbole chimique du dioxygène ?", answers: ["O", "O₂", "CO₂", "H₂O"], correct: 1 },
+                { question: "Que mesure-t-on en volts ?", answers: ["Tension", "Intensité", "Résistance", "Puissance"], correct: 0 },
+                { question: "Combien de secondes dans une heure ?", answers: ["3600", "600", "60", "1200"], correct: 0 },
+                
+
+                
+            ],
+            svt: [
+                {
+                    question: "Où a lieu la digestion chimique des protéines ?",
+                    answers: ["Bouche", "Estomac", "Intestin grêle", "Gros intestin"],
+                    correct: 1
+                },
+                {
+                    question: "Les échanges gazeux respiratoires se font au niveau :",
+                    answers: ["Des bronches", "Des alvéoles", "De la trachée", "Du pharynx"],
+                    correct: 1
+                },
+                {
+                    question: "Le réchauffement climatique est dû principalement à :",
+                    answers: ["L'activité solaire", "Les volcans", "L'effet de serre renforcé", "La déforestation seule"],
+                    correct: 2
+                },
+                {
+                    question: "L'information génétique est portée par :",
+                    answers: ["Les protéines", "L'ADN", "Les lipides", "Les glucides"],
+                    correct: 1
+                },
+                {
+                    question: "Dans une chaîne alimentaire, les producteurs sont :",
+                    answers: ["Les carnivores", "Les herbivores", "Les végétaux", "Les décomposeurs"],
+                    correct: 2
+                },
+                { question: "Quel organe filtre le sang ?", answers: ["Foie", "Cœur", "Rein", "Poumon"], correct: 2 },
+                { question: "La reproduction humaine commence à :", answers: ["L'enfance", "L'adolescence", "L'âge adulte", "La vieillesse"], correct: 1 },
+                { question: "Où se font les échanges gazeux ?", answers: ["Bronches", "Alvéoles", "Trachée", "Larynx"], correct: 1 },
+                { question: "Qu’est-ce qu’un écosystème ?", answers: ["Une ville", "Un milieu de vie et ses habitants", "Un climat", "Une forêt uniquement"], correct: 1 },
+                { question: "Le cœur est un :", answers: ["Organe digestif", "Muscle", "Os", "Nerf"], correct: 1 },
+                { question: "Le CO₂ est rejeté par :", answers: ["Photosynthèse", "Respiration", "Osmose", "Fermentation"], correct: 1 },
+                { question: "Quelle molécule porte les infos génétiques ?", answers: ["ARN", "ADN", "Protéine", "Glucide"], correct: 1 },
+    
+            ]
+        };
+
+        let currentQuestion = null;
+        let questionAnswered = false;
+
+        // Navigation entre les pages principales
+        function showPage(pageId) {
+            // Masquer toutes les pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Masquer tous les boutons de navigation actifs
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Afficher la page sélectionnée
+            document.getElementById(pageId).classList.add('active');
+            
+            // Activer le bouton correspondant
+            event.target.classList.add('active');
+            
+            // Pour les matières, afficher le cours par défaut
+            if (pageId !== 'home') {
+                showSubjectContent(pageId, 'cours');
+            }
+        }
+
+        // Navigation entre cours et QCM pour chaque matière
+        function showSubjectContent(subject, contentType) {
+            // Masquer tous les contenus de la matière
+            document.querySelectorAll(`#${subject} .subject-content`).forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Désactiver tous les boutons de la matière
+            document.querySelectorAll(`#${subject} .subject-btn`).forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Afficher le contenu sélectionné
+            document.getElementById(`${subject}-${contentType}`).style.display = 'block';
+            
+            // Activer le bouton correspondant
+            event.target.classList.add('active');
+            
+            // Si c'est un QCM, générer une première question
+            if (contentType === 'qcm') {
+                generateQuestion(subject);
+            }
+        }
+
+        // Générer une question aléatoire pour une matière
+        function generateQuestion(subject) {
+            const subjectQuestions = questions[subject];
+            const randomIndex = Math.floor(Math.random() * subjectQuestions.length);
+            currentQuestion = {
+                subject: subject,
+                data: subjectQuestions[randomIndex],
+                index: randomIndex
+            };
+            questionAnswered = false;
+            
+            displayQuestion(subject);
+        }
+
+        // Afficher la question
+        function displayQuestion(subject) {
+            const questionContainer = document.getElementById(`${subject}-question`);
+            const questionData = currentQuestion.data;
+            
+            let html = `
+                <div class="question-card">
+                    <div class="question">${questionData.question}</div>
+            `;
+            
+            questionData.answers.forEach((answer, index) => {
+                html += `
+                    <div class="answer-option" onclick="selectAnswer(${index})">
+                        ${String.fromCharCode(65 + index)}. ${answer}
+                    </div>
+                `;
+            });
+            
+            html += `
+                </div>
+                <div class="qcm-controls">
+                    <button class="btn" onclick="checkAnswer()">Vérifier</button>
+                    <button class="btn" onclick="generateQuestion('${subject}')">Question suivante</button>
+                </div>
+            `;
+            
+            questionContainer.innerHTML = html;
+        }
+
+        // Sélectionner une réponse
+        function selectAnswer(answerIndex) {
+            if (questionAnswered) return;
+            
+            // Désélectionner toutes les réponses
+            document.querySelectorAll('.answer-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Sélectionner la réponse cliquée
+            event.target.classList.add('selected');
+            currentQuestion.selectedAnswer = answerIndex;
+        }
+
+        // Vérifier la réponse
+        function checkAnswer() {
+            if (!currentQuestion || currentQuestion.selectedAnswer === undefined || questionAnswered) {
+                return;
+            }
+            
+            questionAnswered = true;
+            const isCorrect = currentQuestion.selectedAnswer === currentQuestion.data.correct;
+            const subject = currentQuestion.subject;
+            
+            // Mettre à jour le score
+            scores[subject].total++;
+            if (isCorrect) {
+                scores[subject].correct++;
+            }
+            
+            // Afficher les bonnes et mauvaises réponses
+            document.querySelectorAll('.answer-option').forEach((option, index) => {
+                if (index === currentQuestion.data.correct) {
+                    option.classList.add('correct');
+                } else if (index === currentQuestion.selectedAnswer && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            // Mettre à jour l'affichage du score
+            updateScore(subject);
+        }
+
+        // Mettre à jour l'affichage du score
+        function updateScore(subject) {
+            const scoreElement = document.getElementById(`${subject}-score`);
+            const score = scores[subject];
+            const percentage = score.total > 0 ? Math.round((score.correct / score.total) * 100) : 0;
+            scoreElement.textContent = `Score: ${score.correct}/${score.total} (${percentage}%)`;
+        }
+
+        // Initialiser les scores à l'ouverture
+        Object.keys(scores).forEach(subject => {
+            updateScore(subject);
+        });
+    </script>
+</body>
+</html>
